@@ -1,35 +1,44 @@
-import * as React from 'react';
-import { Text, TouchableHighlight, View, StyleSheet, Alert } from 'react-native';
+// In App.js in a new project
 
-function Home({ navigation }) {
-    const onPress = () => navigation.navigate('Contacts');
+import * as React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icons from 'react-native-vector-icons/Ionicons';
+import MyHome from './MyHome';
+import Money from './Money';
+import Settings from './Settings';
+import Container from '../common/Container';
+
+const Tab = createBottomTabNavigator();
+
+
+export default function TabBar() {
     return (
-        <View style={styles.container}>
-            <TouchableHighlight style={styles.button} onPress={onPress}>
-                <Text>Add Customers</Text>
-            </TouchableHighlight>
-        </View>
+        <Container>
+            <Tab.Navigator
+                screenOptions={({ route }) => ({
+                    tabBarIcon: ({ focused, color, size }) => {
+                        let iconName;
+
+                        if (route.name === 'Home') {
+                            iconName = focused
+                                ? 'home'
+                                : 'home-outline';
+                        } else if (route.name === 'Money') {
+                            iconName = focused ? 'card' : 'card-outline';
+                        } else if (route.name === 'Settings') {
+                            iconName = focused ? 'settings-sharp' : 'settings-outline';
+                        }
+                        // You can return any component that you like here!
+                        return <Icons name={iconName} size={size} color={color} />;
+                    },
+                    tabBarActiveTintColor: 'tomato',
+                    tabBarInactiveTintColor: 'gray',
+                })}
+            >
+                <Tab.Screen name="Home" component={MyHome} />
+                <Tab.Screen name="Money" component={Money} />
+                <Tab.Screen name="Settings" component={Settings} />
+            </Tab.Navigator>
+        </Container>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    button: {
-        justifyContent: "flex-end",
-        alignItems: "flex-end",
-        backgroundColor: "#32a852",
-        width: "auto",
-        marginBottom: 10,
-        marginRight: 5,
-        borderRadius: 8,
-        padding: 10,
-        marginTop: "auto",
-        marginLeft: "auto"
-
-    }
-});
-
-
-export default Home;
